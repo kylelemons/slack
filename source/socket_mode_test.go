@@ -37,6 +37,9 @@ var (
 	// Non-replay mode:
 	websocketTokenFile = flag.String("websocket-token-file", "", "File referencing a websocket token")
 	saveEnvelopes      = flag.Bool("save-envelopes", false, "If true, save envelopes to testdata for replaying")
+
+	// General:
+	verbose = flag.Bool("verbose", false, "If true, print out verbose logging")
 )
 
 //go:embed testdata/envelopes/*.json
@@ -53,7 +56,12 @@ func TestListenWebsocket(t *testing.T) {
 		t.Fatalf("ListenWebsocket failed: %s", err)
 	}
 	defer ws.Close()
-	ws.Debugf = t.Logf
+	ws.Warnf = t.Errorf
+
+	if *verbose {
+		ws.Debugf = t.Logf
+	}
+
 	if *replay {
 		go func() {
 			fix.fake.Replay(t, "00_added_to_channel.json")
@@ -81,6 +89,22 @@ func TestListenWebsocket(t *testing.T) {
 				return
 			}
 		}
+	}
+
+	// TODO: Use registry.Handle instead of the unexported helper
+	//   This is here for the moment to allow treating warnings as errors.
+	for _, typ := range []string{
+		"member_joined_channel",
+		"message",
+		"reaction_added",
+		"app_mention",
+		"channel_left",
+	} {
+		typ := typ
+		ws.NotificationTypes().handle(typ, func(message json.RawMessage) error {
+			t.Logf("Handling %q: %#q", typ, message)
+			return nil
+		})
 	}
 
 	if err := ws.Serve(ctx); err != nil {
@@ -117,7 +141,9 @@ func setup(t *testing.T, ctx context.Context) (fix fixtures) {
 		t.Fatalf("SETUP: NewClient: %s", err)
 	}
 	client.AppToken = &tok
-	client.Debugf = t.Logf
+	if *verbose {
+		client.Debugf = t.Logf
+	}
 
 	fix.client = client
 	return fix

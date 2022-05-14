@@ -66,15 +66,15 @@ func (ws *Websocket) NotificationTypes() *Registry {
 
 func (ws *Websocket) warnf(format string, args ...interface{}) {
 	if ws.Warnf != nil {
-		ws.Warnf(format, args...)
+		ws.Warnf("WARN: "+format, args...)
 	} else if ws.Debugf != nil {
-		ws.Debugf(format, args...)
+		ws.Debugf("WARN: "+format, args...)
 	}
 }
 
 func (ws *Websocket) debugf(format string, args ...interface{}) {
 	if ws.Debugf != nil {
-		ws.Debugf(format, args...)
+		ws.Debugf("DEBUG: "+format, args...)
 	}
 }
 
@@ -187,7 +187,7 @@ func (w *Websocket) Serve(ctx context.Context) error {
 		if w.Debugf != nil {
 			buf.Reset()
 			json.Indent(buf, raw, "", "    ")
-			w.Debugf("Envelope received:\n%s", buf.String())
+			w.debugf("Envelope received:\n%s", buf.String())
 		}
 
 		// Handle messages asynchronously to avoid blocking future messages
