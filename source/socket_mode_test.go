@@ -64,14 +64,14 @@ func TestListenWebsocket(t *testing.T) {
 
 	if *replay {
 		go func() {
-			fix.fake.Replay(t, "00_added_to_channel.json")
-			fix.fake.Replay(t, "01_channel_self_joined_message.json")
-			fix.fake.Replay(t, "01_channel_message.json")
-			fix.fake.Replay(t, "01_channel_reaction.json")
-			fix.fake.Replay(t, "01_channel_message_with_mention.json")
-			fix.fake.Replay(t, "02_app_mention.json")
-			fix.fake.Replay(t, "00_removed_from_channel.json")
-			fix.fake.Replay(t, "03_slackbot_removal_notification.json")
+			fix.fake.Replay(t, "00_member_joined_channel_self.json")
+			fix.fake.Replay(t, "30_message_channel_join.json")
+			fix.fake.Replay(t, "10_message_to_channel.json")
+			fix.fake.Replay(t, "20_reaction_added_to_message.json")
+			fix.fake.Replay(t, "12_message_with_mention_to_channel.json")
+			fix.fake.Replay(t, "21_app_mention_in_channel.json")
+			fix.fake.Replay(t, "01_channel_left_self.json")
+			fix.fake.Replay(t, "31_slackbot_removal_notification.json")
 			fix.fake.DisconnectClients()
 			t.Logf("Done replaying!")
 		}()
