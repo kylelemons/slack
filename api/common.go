@@ -23,8 +23,8 @@ type Empty struct {
 
 type PostResponse struct {
 	OK        bool   `json:"ok"`
-	Warning   string `json:"warning"`
-	ErrorCode string `json:"error"`
+	Warning   string `json:"warning,omitempty"`
+	ErrorCode string `json:"error,omitempty"`
 }
 
 type Event struct {

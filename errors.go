@@ -31,7 +31,7 @@ type APIError struct {
 }
 
 func (e *APIError) Error() string {
-	return e.Code.Error()
+	return fmt.Sprintf("code %q", e.Code.Error())
 }
 
 func (e *APIError) Unwrap() error {

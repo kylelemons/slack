@@ -65,6 +65,7 @@ func PostJSON[Resp any](ctx context.Context, client *Client, tier *rate.Limiter,
 	client.debugHTTPRequest(httpReq, buf.Bytes())
 	httpResp, err := client.HTTP.Do(httpReq.WithContext(ctx))
 	if err != nil {
+		client.debugf("http.Do error: (%T) %q", err, err)
 		return nil, fmt.Errorf("%s: request failed: %w", method, err)
 	}
 	defer httpResp.Body.Close()
@@ -82,7 +83,7 @@ func PostJSON[Resp any](ctx context.Context, client *Client, tier *rate.Limiter,
 			method, &ParseError{Raw: respJSON, Err: err})
 	}
 	if !apiResp.OK {
-		return nil, fmt.Errorf("%s: request failed: %w",
+		return nil, fmt.Errorf("%s: response not OK: %w",
 			method, &APIError{
 				Code:     ErrorCode(apiResp.ErrorCode),
 				Request:  req,

@@ -19,11 +19,13 @@ import (
 )
 
 type WebsocketHello struct {
-	Type        string `json:"type,omitempty"`
-	Connections int    `json:"num_connections,omitempty"`
-	Info        struct {
-		AppID string `json:"app_id,omitempty"`
-	} `json:"connection_info,omitempty"`
+	Type        string             `json:"type,omitempty"`
+	Connections int                `json:"num_connections,omitempty"`
+	Info        WebsocketHelloInfo `json:"connection_info,omitempty"`
+}
+
+type WebsocketHelloInfo struct {
+	AppID string `json:"app_id,omitempty"`
 }
 
 type Envelope struct {

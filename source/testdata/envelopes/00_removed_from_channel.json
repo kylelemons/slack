@@ -1,0 +1,28 @@
+{
+    "envelope_id": "c986dd8f-8f2e-4397-88a3-f9e3a6d1f6c0",
+    "type": "events_api",
+    "payload": {
+        "token": "QUhYOCQ559ZeSZ1axFrIZKvA",
+        "team_id": "T0396B9SSC9",
+        "api_app_id": "A039HFRHQEL",
+        "event": {
+            "type": "channel_left",
+            "channel": "C038TNGHSCB",
+            "actor_id": "U038W399KBN",
+            "event_ts": "1652547491.000300"
+        },
+        "type": "event_callback",
+        "event_id": "Ev03G63NNLGG",
+        "event_time": 1652547491,
+        "authorizations": [
+            {
+                "enterprise_id": null,
+                "team_id": "T0396B9SSC9",
+                "user_id": "U0396LWTS3T",
+                "is_bot": true,
+                "is_enterprise_install": false
+            }
+        ],
+        "is_ext_shared_channel": false
+    }
+}

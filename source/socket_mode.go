@@ -18,7 +18,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/url"
 	"strings"
 
@@ -43,6 +45,7 @@ type Websocket struct {
 
 	Warnf  func(string, ...interface{})
 	Debugf func(string, ...interface{})
+	Tee    func(env *api.Envelope)
 }
 
 func (ws *Websocket) Close() error {
@@ -174,6 +177,9 @@ func (w *Websocket) Serve(ctx context.Context) error {
 			if strings.Contains(err.Error(), "use of closed network connection") {
 				return nil
 			}
+			if errors.Is(err, io.EOF) {
+				return nil
+			}
 			return err
 		}
 
@@ -186,6 +192,10 @@ func (w *Websocket) Serve(ctx context.Context) error {
 
 		// Handle messages asynchronously to avoid blocking future messages
 		go func() {
+			if w.Tee != nil {
+				w.Tee(env)
+			}
+
 			if err := w.envelopeTypes.Dispatch(env.Type, env.Payload); err != nil {
 				w.warnf("Dispatch %q: %s", env.Type, err)
 			}
