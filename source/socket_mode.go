@@ -79,8 +79,10 @@ func (ws *Websocket) debugf(format string, args ...interface{}) {
 }
 
 func ListenWebsocket(ctx context.Context, client *slack.Client, token config.AppToken) (*Websocket, error) {
+	client = client.WithToken(token)
+
 	req := &api.Empty{}
-	resp, err := slack.PostJSON[api.ConnectionResponse](ctx, client, client.Tier1, "apps.connections.open", req)
+	resp, err := slack.PostJSON[api.ConnectionResponse](ctx, client, client.Limits.HookTier, "apps.connections.open", req)
 	if err != nil {
 		return nil, fmt.Errorf("ListenWebsocket: %w", err)
 	}

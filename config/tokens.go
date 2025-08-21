@@ -17,11 +17,16 @@ package config
 import (
 	"bytes"
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 )
 
 type AppToken string
+
+func (t AppToken) SetHeader(header http.Header) {
+	header.Set("Authorization", "Bearer "+t.String())
+}
 
 func (t AppToken) String() string {
 	return string(t)
@@ -44,6 +49,10 @@ func LoadAppToken(filename string) (AppToken, error) {
 }
 
 type BotToken string
+
+func (t BotToken) SetHeader(header http.Header) {
+	header.Set("Authorization", "Bearer "+t.String())
+}
 
 func (t BotToken) String() string {
 	return string(t)

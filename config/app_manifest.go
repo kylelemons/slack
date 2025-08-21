@@ -14,8 +14,16 @@
 
 package config
 
+import (
+	"github.com/kylelemons/slack/config/configjson"
+)
+
 // AppManifest represents the application manifest provided by Slack.
 type AppManifest struct {
+	DisplayInformation configjson.DisplayInformation `json:"display_information,omitempty"`
+	Features           configjson.AppFeatures        `json:"features,omitempty"`
+	OAuthConfig        configjson.OAuthConfig        `json:"oauth_config,omitempty"`
+	Settings           configjson.AppSettings        `json:"settings,omitempty"`
 }
 
 // LoadManifest loads an app manifest in JSON format.

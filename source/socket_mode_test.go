@@ -136,11 +136,10 @@ func setup(t *testing.T, ctx context.Context) (fix fixtures) {
 		slackURL = fix.fake.URL()
 	}
 
-	client, err := slack.NewClient(slackURL)
+	client, err := slack.NewAppClient(slackURL, tok)
 	if err != nil {
-		t.Fatalf("SETUP: NewClient: %s", err)
+		t.Fatalf("SETUP: NewAppClient: %s", err)
 	}
-	client.AppToken = &tok
 	if *verbose {
 		client.Debugf = t.Logf
 	}
